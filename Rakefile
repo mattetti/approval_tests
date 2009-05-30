@@ -2,6 +2,16 @@ require 'rubygems'
 require 'spec/rake/spectask'
 require 'rake/gempackagetask'
 
+begin
+  require 'spec/rake/spectask'
+rescue LoadError
+  puts <<-EOS
+To use rspec for testing you must install rspec gem:
+    gem install rspec
+EOS
+  exit(0)
+end
+
 spec = Gem::Specification.new do |s|
   s.name = "approval_tests"
   s.version = "0.0.2"
@@ -20,6 +30,14 @@ spec = Gem::Specification.new do |s|
 end
 
 Rake::GemPackageTask.new(spec) do |pkg|
+end
+
+desc "Create .gemspec file (useful for github)"
+task :gemspec do
+  filename = "#{spec.name}.gemspec"
+  File.open(filename, "w") do |f|
+    f.puts spec.to_ruby
+  end
 end
 
 desc("Package gem and install")
