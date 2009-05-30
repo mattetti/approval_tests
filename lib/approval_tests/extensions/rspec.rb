@@ -15,7 +15,7 @@ module ApprovalTests
           if block_given?    
             result = yield implementation
           end
-          Approvals.approve(result)
+          ApprovalTests::Approvals.approve(result)
         end
       end
       
@@ -31,7 +31,7 @@ module ApprovalTests
           if block_given?    
             result = yield implementation
           end
-          Approvals.approve(result, :html)
+          ApprovalTests::Approvals.approve(result, :html)
         end
       end
     end
@@ -40,11 +40,11 @@ end
 
 Spec::Runner.configure do |config|  
   config.before(:each) do
-    Approvals.namer = RSpecNamer.new()
+    ApprovalTests::Approvals.namer = RSpecNamer.new()
     extra_description = ""
     extra_description = "_#{self.description}" if !self.description.empty?
-    Approvals.namer.approval_name = "#{self.class.description}#{extra_description}".gsub("/", "__FORWARD_SLASH__");
-    Approvals.namer.source_file_path = File.dirname(self.class.spec_path)
+    ApprovalTests::Approvals.namer.approval_name = "#{self.class.description}#{extra_description}".gsub("/", "__FORWARD_SLASH__");
+    ApprovalTests::Approvals.namer.source_file_path = File.dirname(self.class.spec_path)
   end
   config.extend(ApprovalTests::Extensions::RSpec)
 end
